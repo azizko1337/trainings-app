@@ -13,7 +13,7 @@ function Index() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header>Check out our new courses <Image src="/icons/hand.svg" alt="Hand poiting down" width={25} height={25} /></Header>
+      <Header mainPage>Check out our new courses <Image src="/icons/hand.svg" alt="Hand pointing down" width={50} height={40} /></Header>
     </>
   );
 }
