@@ -1,5 +1,6 @@
 import Wrapper from "./Wrapper";
 import NavBar from "../NavBar/NavBar";
+import ContentMaxWidth from "./ContentMaxWidth";
 
 function Layout(props: any){
     const {children} = props;
@@ -8,7 +9,9 @@ function Layout(props: any){
         <>
         <NavBar />
         <Wrapper>
-            {children}
+            <ContentMaxWidth>
+                {children}
+            </ContentMaxWidth>
         </Wrapper>
         </>
     );
