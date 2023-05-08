@@ -6,7 +6,7 @@ const Theme = {
         background: '#fff',
         text: '#333333',
         success: '#0070f3',
-        error: '#ff0000',
+        error: '#b3261e',
     },
     size: {
         S: '12px',
