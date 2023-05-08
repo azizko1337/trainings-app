@@ -5,6 +5,7 @@ const NavBarMaxWidth = styled.div`
     max-width: 1400px;
     height: 100%;
     margin: 0 auto;
+    padding: 10px;
 
     display:flex;
     justify-content: space-between;

@@ -9,7 +9,7 @@ const CardContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
 
-    background: ${({ theme }) => theme.colors.secondary};
+    background: ${({ theme }) => theme.colors.primary};
     border-radius: 10px;
     box-shadow: 0px 6px 10px rgba(42, 59, 77, 0.2);
 `

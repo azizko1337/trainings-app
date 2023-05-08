@@ -1,8 +1,9 @@
 const Theme = {
     colors: {
-        primary: '#0070f3',
-        secondary: '#ddd',
-        background: '#f5f5f5',
+        primary: '#e7e7e7',
+        secondary: '#706f93',
+        tertiary: "#4d4c78",
+        background: '#fff',
         text: '#333333',
         success: '#0070f3',
         error: '#ff0000',
@@ -12,7 +13,8 @@ const Theme = {
         M: '18px',
         L: '24px',
         XL: '34px',
-        XXL: '50px',
+        XXL: '38px',
+        XXXL: '48px',
     }
 }
 

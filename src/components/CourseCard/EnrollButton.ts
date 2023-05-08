@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 const EnrollButton = styled.button`
-  background: #706f93;
-  border: 2px solid #4d4c78;
+  background: ${({theme}) => theme.colors.secondary};
+  border: 2px solid ${({theme}) => theme.colors.tertiary};
   border-radius: 20px;
-  color: white;
+  color: ${({theme}) => theme.colors.background};
   font-size: 15px;
   padding: 8px 15px;
   display: flex;
@@ -14,8 +14,8 @@ const EnrollButton = styled.button`
 
   &:hover{
     cursor: pointer;
-    background: #fff;
-    color: #706f93;
+    background: ${({theme}) => theme.colors.background};
+    color: ${({theme}) => theme.colors.text};
   }
 `
 
