@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ContentMaxWidth = styled.div`
+const ContentMaxWidth = styled.main`
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;

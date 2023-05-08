@@ -13,7 +13,7 @@ function NavBar(){
                     <AppIconContainer>
                         <Image src="/icons/appLogo.svg" alt="Graduation icon" fill={true}/>
                     </AppIconContainer>
-                    <Header>Welcome to the sci fi</Header>
+                    <Header>Trainings</Header>
                 </GroupFlex>
             </NavBarMaxWidth>
         </NavBarContainer>
