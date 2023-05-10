@@ -22,7 +22,7 @@ function CreateCourse(){
         language: "",
         location: "",
         level: "easy",
-        image: "/default-placeholder.png"
+        courseImage: "/default-placeholder.png"
     });
 
     function handleChange(e: ChangeEvent){
@@ -36,7 +36,7 @@ function CreateCourse(){
         }else if(id === "en" || id === "pl"){
             const name: string = target.name;
             setForm({...form, [name]: target.value});
-        }else if(id === "image"){
+        }else if(id === "courseImage"){
             if(target.files === null) return;
 
             const file = target.files[0];
@@ -44,7 +44,7 @@ function CreateCourse(){
             const reader = new FileReader();
             reader.onloadend = () => {
                 if(reader.result === null) return;
-                setForm({...form, image: reader.result as string});
+                setForm({...form, courseImage: reader.result as string});
             }
             reader.readAsDataURL(file);
         }
@@ -79,7 +79,7 @@ function CreateCourse(){
                     <Button type="submit">Add course</Button>
                 </LeftColumn>
                 <RightColumn>
-                    <ImageInput id="image" label="Select course image" selectedImage={form.image} changeHandler={handleChange}/>
+                    <ImageInput id="courseImage" label="Select course image" selectedImage={form.courseImage} changeHandler={handleChange}/>
                 </RightColumn>
             </FormWrapper>
         </>
