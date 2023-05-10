@@ -22,7 +22,6 @@ function CreateCourse(){
         language: "",
         location: "",
         level: "easy",
-        trainer: "",
         image: "/default-placeholder.png"
     });
 
@@ -76,7 +75,6 @@ function CreateCourse(){
                     <span></span>
                     <Input id="location" type="text" label="Location" placeholder="Type location" value={form.location} changeHandler={handleChange} error={""}/>
                     <Select id="level" label="Level" value={form.level} options={["easy", "medium", "hard"]} changeHandler={handleChange}/>
-                    <Input id="trainer" type="text" label="Trainer" placeholder="Type trainer name" value={form.trainer} changeHandler={handleChange} error={""}/>
                     <span></span>
                     <Button type="submit">Add course</Button>
                 </LeftColumn>
