@@ -9,7 +9,7 @@ const Theme = {
         error: '#b3261e',
     },
     size: {
-        S: '12px',
+        S: '14px',
         M: '18px',
         L: '24px',
         XL: '34px',
