@@ -6,6 +6,8 @@ const ContentMaxWidth = styled.main`
     margin: 0 auto;
     padding: 0 30px 30px 30px;
     flex-grow:1;
+    display: flex;
+    flex-direction: column;
 
     &>menu{
         margin-bottom: 20px;

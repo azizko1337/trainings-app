@@ -51,9 +51,10 @@ function Register(){
 
     return (
         <>
-            <SubHeader>Register</SubHeader>
             <FormWrapper onSubmit={handleSubmit}>
                 <LeftColumn>
+                    <SubHeader>Register</SubHeader>
+                    <span></span>
                     <Input id="email" type="text" label="Email" placeholder="Type email" value={form.email} changeHandler={handleChange} error={""}/>
                     <Input id="firstName" type="text" label="First name" placeholder="Type first name" value={form.firstName} changeHandler={handleChange} error={""}/>
                     <Input id="lastName" type="text" label="Last name" placeholder="Type last name" value={form.lastName} changeHandler={handleChange} error={""}/>

@@ -6,11 +6,16 @@ const FormWrapper = styled.form`
 
     display: flex;
     flex-direction: row;
+    align-items: center;
 
     margin-top: 20px;
 
     @media(orientation: portrait) {
         flex-direction: column-reverse;
+    }
+    
+    @media(orientation: landscape){
+        flex-grow:1;
     }
 `
 

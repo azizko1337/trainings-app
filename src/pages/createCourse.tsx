@@ -56,9 +56,10 @@ function CreateCourse(){
     
     return (
         <>
-            <SubHeader>Create new course</SubHeader>
             <FormWrapper>
                 <LeftColumn>
+                <SubHeader>New course</SubHeader>
+                <span></span>
                     <Input id="name" type="text" label="Name" placeholder="Type name" value={form.name} changeHandler={handleChange} error={""}/>
                     <span></span>
                     <Input id="startDate" type="date" label="Start date" placeholder="" value={new Date(form.startDate).toISOString().split('T')[0]} changeHandler={handleChange} error={""}/>
