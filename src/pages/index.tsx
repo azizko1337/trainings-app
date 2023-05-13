@@ -75,11 +75,16 @@ function Index() {
     trainer: [],
   });
   
+  function handleSearch(e: ChangeEvent){
+    const target = e.target as HTMLInputElement;
+    setSearch(target.value);
+  }
+
   return (
     <>
       <Header mainPage>Check out our new courses <Image src="/icons/hand.svg" alt="Hand pointing down" width={50} height={40} /></Header>
       <menu>
-        <Input id="searchCourse" type="text" label="" placeholder="Search by name" value={search} changeHandler={(e: ChangeEvent) => setSearch(e.target.value)} error={""}/>
+        <Input id="searchCourse" type="text" label="" placeholder="Search by name" value={search} changeHandler={handleSearch} error={""}/>
         <Button onClick={() => setShowFiltersMenu(true)}>Filters</Button>
         <FiltersMenu show={showFiltersMenu} handleClose={() => setShowFiltersMenu(false)} courses={courses} setFilters={setFilters}/>
       </menu>
