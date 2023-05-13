@@ -5,7 +5,7 @@ const Theme = {
         tertiary: "#4d4c78",
         background: '#fff',
         text: '#333333',
-        success: '#0070f3',
+        success: '#60f763',
         error: '#b3261e',
     },
     size: {

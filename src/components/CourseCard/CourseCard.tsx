@@ -7,6 +7,7 @@ import CardBody from "./CardBody";
 import CardBodyRow from "./CardBodyRow";
 import CardFooter from "./CardFooter";
 import EnrollButton from "./EnrollButton";
+import timeStampToString from "@/utils/timestampToString";
 
 function CourseCard(props: CourseInfo){
     const {id, img, title, startDate, endDate, startTime, endTime, level, location, trainer} = props;
@@ -20,7 +21,7 @@ function CourseCard(props: CourseInfo){
                 <SubHeader thin>{title}</SubHeader>
             </CardHeader>
             <CardBody>
-                <CardBodyRow><Image src="/icons/calendar.svg" alt="course start and end dates" width={18} height={18}/>{new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()}</CardBodyRow>
+                <CardBodyRow><Image src="/icons/calendar.svg" alt="course start and end dates" width={18} height={18}/>{timeStampToString(startDate, endDate)}</CardBodyRow>
                 <CardBodyRow><Image src="/icons/clock.svg" alt="course start and end time" width={18} height={18}/>{startTime} - {endTime}</CardBodyRow>
                 <CardBodyRow><Image src="/icons/level.svg" alt="course level" width={18} height={18}/>{level}</CardBodyRow>
                 <CardBodyRow><Image src="/icons/location.svg" alt="location" width={18} height={18}/>{location}</CardBodyRow>

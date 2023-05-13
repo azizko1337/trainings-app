@@ -12,16 +12,17 @@ type Props = {
     value: string;
     changeHandler: ChangeEventHandler;
     options: string[];
+    multiple?: boolean;
     error?: string;
 }
 
 function Select(props: Props){
-    const {id, label, value, changeHandler, options, error=""} = props;
+    const {id, label, value, changeHandler, options, multiple=false, error=""} = props;
 
     return (
         <InputContainer error={error.length>0}>
             <InputLabel htmlFor={id}>{label}</InputLabel>
-            <SelectSelect id={id} name={id} value={value} onChange={changeHandler}>
+            <SelectSelect multiple={multiple} id={id} name={id} value={value} onChange={changeHandler}>
                 {options.map((option, index) => <Option key={index} value={option}>{option}</Option>)}
             </SelectSelect>
             <Error error={error.length>0}>{error}</Error>

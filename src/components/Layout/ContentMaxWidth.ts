@@ -10,8 +10,10 @@ const ContentMaxWidth = styled.main`
     &>menu{
         margin-bottom: 20px;
         display:flex;
-        justify-content: flex-end;
-        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        position: relative;
     }
 `
 
