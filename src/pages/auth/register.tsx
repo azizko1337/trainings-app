@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import FormWrapper from "@/components/Layout/Pages/register/FormWrapper";
 import LeftColumn from "@/components/Layout/Pages/register/LeftColumn";
 import RightColumn from "@/components/Layout/Pages/register/RightColumn";
@@ -7,6 +7,7 @@ import Button from "@/components/Form/Button";
 import SubHeader from "@/components/Text/SubHeader";
 import Feedback from "@/components/Form/Feedback";
 import ImageInput from "@/components/Form/ImageInput/ImageInput";
+import Validate from "@/utils/Validate";
 
 function Register(){
     const [form, setForm] = useState({
@@ -44,9 +45,33 @@ function Register(){
         });
     }
 
+    const [errors, setErrors] = useState({
+        email: "",
+        firstName: "",
+        lastName: "",
+        password: "",
+        passwordConfirm: "",
+    });
+    useEffect(() => {
+        setErrors({
+            email: Validate.email(form.email, true),
+            firstName: Validate.firstName(form.firstName, true),
+            lastName: Validate.lastName(form.lastName, true),
+            password: Validate.password(form.password, true),
+            passwordConfirm: Validate.comparePasswords(form.password, form.passwordConfirm, true),
+        })
+    }, [form, setErrors]);
+
+    const [feedback, setFeedback] = useState("");
+
     function handleSubmit(e: FormEvent){
         e.preventDefault();
+        setFeedback("Registering...");
         // TODO
+    }
+
+    function shouldSubmitBeDisabled(){
+        return (form.email.length == 0 && form.firstName.length == 0 && form.lastName.length == 0 && form.password.length==0 && form.passwordConfirm.length==0) || (errors.email.length > 0 || errors.firstName.length > 0 || errors.lastName.length > 0 || errors.password.length > 0 || errors.passwordConfirm.length > 0);
     }
 
     return (
@@ -55,14 +80,14 @@ function Register(){
                 <LeftColumn>
                     <SubHeader>Register</SubHeader>
                     <span></span>
-                    <Input id="email" type="text" label="Email" placeholder="Type email" value={form.email} changeHandler={handleChange} error={""}/>
-                    <Input id="firstName" type="text" label="First name" placeholder="Type first name" value={form.firstName} changeHandler={handleChange} error={""}/>
-                    <Input id="lastName" type="text" label="Last name" placeholder="Type last name" value={form.lastName} changeHandler={handleChange} error={""}/>
-                    <Input id="password" type="password" label="Password" placeholder="Type password" value={form.password} changeHandler={handleChange} error={""}/>
+                    <Input id="email" type="text" label="Email" placeholder="Type email" value={form.email} changeHandler={handleChange} error={errors.email}/>
+                    <Input id="firstName" type="text" label="First name" placeholder="Type first name" value={form.firstName} changeHandler={handleChange} error={errors.firstName}/>
+                    <Input id="lastName" type="text" label="Last name" placeholder="Type last name" value={form.lastName} changeHandler={handleChange} error={errors.lastName}/>
+                    <Input id="password" type="password" label="Password" placeholder="Type password" value={form.password} changeHandler={handleChange} error={errors.password}/>
                     <span></span>
-                    <Input id="passwordConfirm" type="password" label="Confirm password" placeholder="Repeat password" value={form.passwordConfirm} changeHandler={handleChange} error={""}/>            
-                    <Feedback error={true}>to handle:</Feedback>
-                    <Button type="submit">Register</Button>
+                    <Input id="passwordConfirm" type="password" label="Confirm password" placeholder="Repeat password" value={form.passwordConfirm} changeHandler={handleChange} error={errors.passwordConfirm}/>            
+                    <Feedback>{feedback}</Feedback>
+                    <Button type="submit" disabled={shouldSubmitBeDisabled()}>Register</Button>
                 </LeftColumn>
                 <RightColumn>
                     <ImageInput id="profileImage" label="Profile picture" selectedImage={form.profileImage} changeHandler={handleChange}/>
