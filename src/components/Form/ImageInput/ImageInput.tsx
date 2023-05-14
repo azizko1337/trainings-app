@@ -18,7 +18,7 @@ function ImageInput(props: Props){
     return (
         <Container>
             <Label htmlFor={id}>{label}</Label>
-            <InputInput id={id} name={id} type="file" accept="image/*" onChange={changeHandler}/>
+            <InputInput id={id} name={id} type="file" accept="image/png, image/jpeg" onChange={changeHandler}/>
             <ImageContainer>
                 <Image src={selectedImage} alt="React" fill={true}/>
             </ImageContainer>
