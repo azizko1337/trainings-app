@@ -19,6 +19,13 @@ const Button = styled.button<Props>`
         color: ${({theme}) => theme.colors.background};
     }
 
+    &:disabled{
+        border-color:${({theme}) => theme.colors.error};
+        &:hover{
+            cursor: not-allowed;
+        }
+    }
+
     ${props => props.mini ? `
         padding: 5px 20px;
         
