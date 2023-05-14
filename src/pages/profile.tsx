@@ -32,8 +32,7 @@ function Profile(){
             firstName: Validate.firstName(form.firstName, true),
             lastName: Validate.lastName(form.lastName, true),
             newPassword: Validate.password(form.newPassword, true),
-            oldPassword: Validate.password(form.oldPassword, true),
-
+            oldPassword: Validate.oldPassword(form.oldPassword),
         })
     }, [form, setErrors]);
 
@@ -71,6 +70,10 @@ function Profile(){
         // TODO
     }
 
+    function shouldSubmitBeDisabled(){
+        return (form.email.length == 0 && form.firstName.length == 0 && form.lastName.length == 0) || (errors.email.length > 0 || errors.firstName.length > 0 || errors.lastName.length > 0 || errors.oldPassword.length > 0 || errors.newPassword.length > 0);
+    }
+
     return (
         <>
             <FormWrapper onSubmit={handleSubmit}>
@@ -88,7 +91,7 @@ function Profile(){
                     <div></div>
                     <Input id="oldPassword" type="password" label="Current password" placeholder="Type current password" value={form.oldPassword} changeHandler={handleChange} error={errors.oldPassword}/>            
                     <Feedback>{feedback}</Feedback>
-                    <Button type="submit">Change</Button>
+                    <Button type="submit" disabled={shouldSubmitBeDisabled()}>Change</Button>
                 </LeftColumn>
                 <RightColumn>
                     <ImageInput id="profileImage" label="Profile picture" selectedImage={form.profileImage} changeHandler={handleChange}/>

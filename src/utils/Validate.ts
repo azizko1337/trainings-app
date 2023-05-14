@@ -47,6 +47,19 @@ class Validate{
         }
     }
 
+    static oldPassword(password: string): string{
+        if(password.length===0) return "Type old password to make any changes";
+        if(password.length < 8){
+            return "Password must be at least 8 characters";
+        }
+        else if(password.length > 64){
+            return "Password must be less than 65 characters";
+        }
+        else{
+            return "";
+        }
+    }
+
     static comparePasswords(password: string, confirmPassword: string, frontend: boolean): string{
 
         if(password !== confirmPassword){
