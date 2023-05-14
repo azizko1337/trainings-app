@@ -9,6 +9,7 @@ type CourseInfo = {
     level: string;
     location: string;
     trainer: string;
+    trainerId: string;
 }
 
 export default CourseInfo;

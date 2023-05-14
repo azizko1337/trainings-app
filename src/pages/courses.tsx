@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Inter } from "@next/font/google";
 import Image from "next/image";
 import Header from "@/components/Text/Header";
 import type CourseInfo from "@/types/CourseInfo";
@@ -12,9 +11,8 @@ import type Filters from "@/types/Filters";
 import type { ChangeEvent } from "react";
 import filterCourses from "@/utils/filterCourses";
 
-const inter = Inter({ subsets: ["latin"] });
 
-function Index() {
+function Courses() {
   const courses: CourseInfo[] = [
     {
       id: "1",
@@ -69,6 +67,7 @@ function Index() {
       trainerId: "3",
     }
   ];
+
   const [showFiltersMenu, setShowFiltersMenu] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
   const [filters, setFilters] = useState<Filters>({
@@ -86,17 +85,17 @@ function Index() {
 
   return (
     <>
-      <Header mainPage>Check out our new courses <Image src="/icons/hand.svg" alt="Hand pointing down" width={50} height={40} /></Header>
+      <Header mainPage>My courses: </Header>
       <menu>
         <Input id="searchCourse" type="text" label="" placeholder="Search by name" value={search} changeHandler={handleSearch} error={""}/>
         <Button onClick={() => setShowFiltersMenu(true)}>Filters</Button>
         <FiltersMenu show={showFiltersMenu} handleClose={() => setShowFiltersMenu(false)} courses={courses} setFilters={setFilters}/>
       </menu>
       <CardsGrid>
-        {filterCourses(courses, filters, search).map((course, index) => <CourseCard key={"coursecard" + index} {...course}/>)}
+        {filterCourses(courses, filters, search).map((course, index) => <CourseCard noEnroll key={"courseCard" + index} {...course}/>)}
       </CardsGrid>
     </>
   );
 }
 
-export default Index;
+export default Courses;

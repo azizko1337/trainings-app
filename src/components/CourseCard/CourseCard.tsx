@@ -9,8 +9,12 @@ import CardFooter from "./CardFooter";
 import EnrollButton from "./EnrollButton";
 import timeStampToString from "@/utils/timestampToString";
 
-function CourseCard(props: CourseInfo){
-    const {id, img, title, startDate, endDate, startTime, endTime, level, location, trainer} = props;
+interface Props extends CourseInfo {
+    noEnroll?: boolean;
+}
+
+function CourseCard(props: Props){
+    const {id, img, title, startDate, endDate, startTime, endTime, level, location, trainer, noEnroll = false} = props;
 
     return (
         <CardCointainer>
@@ -27,9 +31,11 @@ function CourseCard(props: CourseInfo){
                 <CardBodyRow><Image src="/icons/location.svg" alt="location" width={18} height={18}/>{location}</CardBodyRow>
                 <CardBodyRow><Image src="/icons/trainer.svg" alt="trainer" width={18} height={18}/>{trainer}</CardBodyRow>
             </CardBody>
-            <CardFooter>
-                <EnrollButton>Enroll</EnrollButton>
-            </CardFooter>
+            {noEnroll ? null : 
+                <CardFooter>
+                    <EnrollButton>Enroll</EnrollButton>
+                </CardFooter>
+            }
         </CardCointainer>
     )
 }
