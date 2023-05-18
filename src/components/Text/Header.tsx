@@ -4,6 +4,7 @@ import shake from "@/styles/animations/shake";
 type Props = {
     theme: object;
     mainPage?: boolean;
+    error?: boolean;
 }
 
 const Header = styled.h1<Props>`
@@ -12,6 +13,7 @@ const Header = styled.h1<Props>`
     letter-spacing: 1px;
     text-align: center;
 
+    ${({error, theme}) => error ? `color: ${theme.colors.error};` : null}
 
     /* hand icon */
     ${({mainPage}) => mainPage ? css`
