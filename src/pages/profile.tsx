@@ -8,9 +8,10 @@ import SubHeader from "@/components/Text/SubHeader";
 import Feedback from "@/components/Form/Feedback";
 import ImageInput from "@/components/Form/ImageInput/ImageInput";
 import Validate from "@/utils/Validate";
+import type ProfileForm from "@/types/ProfileForm";
 
 function Profile(){
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<ProfileForm>({
         email: "",
         firstName: "",
         lastName: "",
