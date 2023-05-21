@@ -166,6 +166,49 @@ function Profile() {
       }
     }
   }
+  function shouldTrainerBeDisabled() {
+    return errorsTrainer.code.length > 0;
+  }
+
+  const [trainerForm, setTrainerForm] = useState({
+    code: "",
+  });
+  const [trainerFeedback, setTrainerFeedback] = useState("");
+  const [errorsTrainer, setErrorsTrainer] = useState({
+    code: "",
+  });
+  useEffect(() => {
+    setErrorsTrainer({
+      code: Validate.becomeTrainerCode(trainerForm.code),
+    });
+  }, [trainerForm, setErrorsTrainer]);
+  async function handleBecomeTrainer(e: MouseEvent) {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/auth/trainer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(trainerForm),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        await Router.push("/");
+        Router.reload();
+      } else {
+        setTrainerFeedback(data.feedback);
+      }
+    } catch (e: any) {
+      setTrainerFeedback("Error communicating with server.");
+    }
+  }
+  function handleTrainerChange(e: FormEvent) {
+    const target = e.target as HTMLInputElement;
+    setTrainerForm({
+      code: target.value,
+    });
+  }
 
   return (
     <>
@@ -261,8 +304,29 @@ function Profile() {
           <span></span>
           <Feedback>{deleteFeedback}</Feedback>
         </LeftColumn>
-
-        <RightColumn></RightColumn>
+        <LeftColumn>
+          <SubHeader>Be trainer</SubHeader>
+          <span></span>
+          <Input
+            id="becomeTrainerCode"
+            type="password"
+            label="Trainer code"
+            placeholder="Type trainer code you got"
+            value={trainerForm.code}
+            changeHandler={handleTrainerChange}
+            error={errorsTrainer.code}
+          />
+          <Button
+            fixed={true}
+            type="submit"
+            onClick={handleBecomeTrainer}
+            disabled={shouldTrainerBeDisabled()}
+          >
+            Become trainer
+          </Button>
+          <span></span>
+          <Feedback>{trainerFeedback}</Feedback>
+        </LeftColumn>
       </FormWrapper>
     </>
   );

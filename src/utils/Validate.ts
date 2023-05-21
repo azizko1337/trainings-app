@@ -64,6 +64,16 @@ class Validate {
     }
   }
 
+  static becomeTrainerCode(code: string): string {
+    if (code.length < 8) {
+      return "Code must be at least 8 characters";
+    } else if (code.length > 64) {
+      return "Code must be less than 65 characters";
+    } else {
+      return "";
+    }
+  }
+
   static comparePasswords(
     password: string,
     confirmPassword: string,

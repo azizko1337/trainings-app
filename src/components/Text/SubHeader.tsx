@@ -9,7 +9,6 @@ const SubHeader = styled.h2<Props>`
   font-size: ${({ theme }) => theme.size.XL};
   color: ${({ theme }) => theme.colors.text};
   letter-spacing: 1px;
-  word-wrap: break-word;
 
   ${({ error, theme }) => (error ? `color: ${theme.colors.error};` : null)}
 
