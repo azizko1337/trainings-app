@@ -11,203 +11,214 @@ import type { DeleteBody } from "@/types/controllers/UserController";
 const prisma = new PrismaClient();
 
 class UserController {
-  static async create(req: NextApiRequest, res: NextApiResponse, userData: User) {
-    if(req.session?.user){
-      return res.status(500).json({feedback: "You are already logged in."});
+  static async create(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    userData: User
+  ) {
+    if (req.session?.user) {
+      return res.status(500).json({ feedback: "You are already logged in." });
     }
-    try{
-        let user = {};
-        let passwordHash;
+    try {
+      let user = {};
+      let passwordHash;
 
-        try{
-          passwordHash = await bcrypt.hash(userData.password, 10);
-        }catch(error){
-          throw new Error("Error while hashing password.");
-        }
+      try {
+        passwordHash = await bcrypt.hash(userData.password, 10);
+      } catch (error) {
+        throw new Error("Error while hashing password.");
+      }
 
-        try{
-          user = await prisma.user.create(
-            {
-              data: {
-                email: userData.email,
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                password: passwordHash,
-                img: userData.img,
-              }
+      try {
+        user = await prisma.user.create({
+          data: {
+            email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            password: passwordHash,
+            img: Buffer.from(userData.img),
+          },
+        });
+      } catch (e: any) {
+        throw new Error("Email already exists");
+      }
 
-            },
-          );
-        }catch(e: any){
-          throw new Error("Email already exists");
-        }
-    
-        await setSession(req, user as User);
-        return res.status(200).json({ok: true});
-    }catch(e: any){
-        return res.status(500).json({ok: false, feedback: e.message});
+      await setSession(req, user as User);
+      return res.status(200).json({ ok: true });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, feedback: e.message });
     }
   }
 
   static async read(req: NextApiRequest, res: NextApiResponse) {
-    if(!req.session?.user){
-      return res.status(500).json({feedback: "You are not logged in."});
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
     }
-    try{
-        let user = await prisma.user.findUnique(
-          {
-            where: {
-              id: req.session.user.id,
-            },
-          },
-        );
-        if(!user){
-          throw new Error("User not found");
-        }
-        user = user as UserBackend;
-        const userFrontend: UserFrontend = {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          img: user.img,
-          isTrainer: user.isTrainer,
-        };
-    
-        return res.json(userFrontend);
-    }catch(e: any){
-        return res.status(500).json({ok:false, feedback: "User not found"});
+    try {
+      let user = await prisma.user.findUnique({
+        where: {
+          id: req.session.user.id,
+        },
+      });
+      if (!user) {
+        throw new Error("User not found");
+      }
+      user = user as UserBackend;
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const userFrontend: UserFrontend = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        img: Buffer.from(user.img),
+        isTrainer: user.isTrainer,
+      };
+
+      return res.json(userFrontend);
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, feedback: "User not found" });
     }
   }
 
   static async update(req: NextApiRequest, res: NextApiResponse) {
     const userData: ProfileForm = req.body;
 
-    if(!req.session?.user){
-      return res.status(500).json({feedback: "You are not logged in."});
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
     }
-    try{
-      const user = await prisma.user.findUnique(
-        {
-          where: {
-            id: req.session.user.id,
-          },
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.session.user.id,
         },
-      );
-      if(!user){
+      });
+      if (!user) {
         throw new Error("Your session has expired. Please log in again.");
       }
-  
-      const isPasswordValid = await bcrypt.compare(userData.oldPassword, user.password);
-      if(!isPasswordValid){
+
+      const isPasswordValid = await bcrypt.compare(
+        userData.oldPassword,
+        user.password
+      );
+      if (!isPasswordValid) {
         throw new Error("Invalid old password");
       }
 
-      try{
-        await prisma.user.update(
-          {
-            where: {
-              id: req.session.user.id,
-            },
-            data: {
-              firstName: userData.firstName,
-              lastName: userData.lastName,
-              img: userData.profileImage,
-              password: (userData.newPassword.length > 0 ? await bcrypt.hash(userData.newPassword, 10) : user.password),
-            },
+      try {
+        await prisma.user.update({
+          where: {
+            id: req.session.user.id,
           },
-        );
-      }catch(error){
+          data: {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            img: Buffer.from(userData.profileImage),
+            password:
+              userData.newPassword.length > 0
+                ? await bcrypt.hash(userData.newPassword, 10)
+                : user.password,
+          },
+        });
+      } catch (error) {
         throw new Error("Error editing data.");
       }
-    
-      return res.json({ok: true});
-    }catch(e: any){
-        return res.status(500).json({feedback: e.message});
+
+      return res.json({ ok: true });
+    } catch (e: any) {
+      return res.status(500).json({ feedback: e.message });
     }
   }
 
   static async delete(req: NextApiRequest, res: NextApiResponse) {
     const userData: DeleteBody = req.body;
-    if(!req.session?.user){
-      return res.status(500).json({feedback: "You are not logged in."});
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
     }
-    try{
-        const user = await prisma.user.findUnique(
-          {
-            where: {
-              id: req.session.user.id,
-            },
-          },
-        );
-        if(!user){
-          throw new Error("Wrong user.");
-        }
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.session.user.id,
+        },
+      });
+      if (!user) {
+        throw new Error("Wrong user.");
+      }
 
-        const isPasswordValid = await bcrypt.compare(userData.oldPassword, user.password);
-      if(!isPasswordValid){
+      const isPasswordValid = await bcrypt.compare(
+        userData.oldPassword,
+        user.password
+      );
+      if (!isPasswordValid) {
         throw new Error("Invalid old password");
       }
-      
-      try{
-        await prisma.user.delete(
-          {
-            where: {
-              id: req.session.user.id,
-            },
+
+      try {
+        await prisma.user.delete({
+          where: {
+            id: req.session.user.id,
           },
-        );
-        }catch(error){
-          throw new Error("Database error while deleting user.");
-        }
-    
-        req.session.destroy();
-        return res.json({ok: true});
-    }catch(e: any){
-        return res.status(500).json({ok: false, feedback: e.message});
+        });
+      } catch (error) {
+        throw new Error("Database error while deleting user.");
+      }
+
+      req.session.destroy();
+      return res.json({ ok: true });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, feedback: e.message });
     }
   }
 
-  static async login(req: NextApiRequest, res: NextApiResponse, userData: User) {
-    if(req.session?.user){
-      return res.status(500).json({feedback: "User already logged in."});
+  static async login(
+    req: NextApiRequest,
+    res: NextApiResponse,
+    userData: User
+  ) {
+    if (req.session?.user) {
+      return res.status(500).json({ feedback: "User already logged in." });
     }
-    try{
-        const user = await prisma.user.findUnique(
-          {
-            where: {
-              email: userData.email,
-            },
-          },
-        );
-    
-        if(!user){
-          throw new Error("User not found");
-        }
-    
-        const isPasswordValid = await bcrypt.compare(userData.password, user.password);
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: userData.email,
+        },
+      });
 
-        if(!isPasswordValid){
-          throw new Error("Invalid password");
-        }
+      if (!user) {
+        throw new Error("User not found");
+      }
 
-        setSession(req, user as User);
-    
-        return res.json({ok: true});
-    }catch(e: any){
-        return res.status(500).json({feedback: e.message});
+      const isPasswordValid = await bcrypt.compare(
+        userData.password,
+        user.password
+      );
+
+      if (!isPasswordValid) {
+        throw new Error("Invalid password");
+      }
+
+      setSession(req, user as User);
+
+      return res.json({ ok: true });
+    } catch (e: any) {
+      return res.status(500).json({ feedback: e.message });
     }
   }
 
   static async logout(req: NextApiRequest, res: NextApiResponse) {
-    if(!req.session?.user){
-      return res.status(500).json({feedback: "You are not logged in."});
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
     }
-    try{
-        req.session.destroy();
-        return res.json({ok: true});
-    }catch(e: any){
-        return res.status(500).json({ok: false, feedback: "Errpr while logging out."});
+    try {
+      req.session.destroy();
+      return res.json({ ok: true });
+    } catch (e: any) {
+      return res
+        .status(500)
+        .json({ ok: false, feedback: "Errpr while logging out." });
     }
   }
 }
