@@ -24,6 +24,11 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
         req,
         res as NextApiResponse<ResData>
       );
+    case "DELETE":
+      return await CourseController.delete(
+        req,
+        res as NextApiResponse<ResData>
+      );
     default:
       return res
         .status(405)

@@ -11,10 +11,10 @@ import type Filters from "@/types/Filters";
 import type { ChangeEvent } from "react";
 import filterCourses from "@/utils/filterCourses";
 
-function Courses() {
+function TrainedCourses() {
   const [courses, setCourses] = useState<CourseInfo[]>([]);
   useEffect(() => {
-    fetch("/api/course/getParticipiedIn", {
+    fetch("/api/course/getTrained", {
       method: "GET",
     }).then((res) =>
       res.json().then((data) => {
@@ -63,11 +63,11 @@ function Courses() {
       </menu>
       <CardsGrid>
         {filterCourses(courses, filters, search).map((course, index) => (
-          <CourseCard unEnroll key={"courseCard" + index} {...course} />
+          <CourseCard deleteCourse key={"courseCard" + index} {...course} />
         ))}
       </CardsGrid>
     </>
   );
 }
 
-export default Courses;
+export default TrainedCourses;

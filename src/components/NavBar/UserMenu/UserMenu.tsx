@@ -41,13 +41,25 @@ function UserMenu() {
 
       <Options show={showOptions} onClick={() => setShowOptions(false)}>
         {user ? (
-          <>
-            <Option href="/courses">My courses</Option>
-            <Option href="/profile">Profile settings</Option>
-            <Option onClick={handleLogout} href="/">
-              Logout
-            </Option>
-          </>
+          user.isTrainer ? (
+            <>
+              <Option href="/courses">My courses</Option>
+              <Option href="/trainedCourses">My courses (trainer)</Option>
+              <Option href="/createCourse">Create course</Option>
+              <Option href="/profile">Profile settings</Option>
+              <Option onClick={handleLogout} href="/">
+                Logout
+              </Option>
+            </>
+          ) : (
+            <>
+              <Option href="/courses">My courses</Option>
+              <Option href="/profile">Profile settings</Option>
+              <Option onClick={handleLogout} href="/">
+                Logout
+              </Option>
+            </>
+          )
         ) : (
           <>
             <Option href="/auth/login">Login</Option>

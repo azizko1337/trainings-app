@@ -10,13 +10,13 @@ type ResData = {
   courses?: Course;
 };
 
-async function getParticipiedInRoute(
+async function getTrainedRoute(
   req: NextApiRequest,
   res: NextApiResponse<ResData>
 ) {
   switch (req.method) {
     case "GET":
-      return await CourseController.getParticipiedInCourses(
+      return await CourseController.getTrainedCourses(
         req,
         res as NextApiResponse<ResData>
       );
@@ -27,4 +27,4 @@ async function getParticipiedInRoute(
   }
 }
 
-export default withIronSessionApiRoute(getParticipiedInRoute, ironOptions);
+export default withIronSessionApiRoute(getTrainedRoute, ironOptions);

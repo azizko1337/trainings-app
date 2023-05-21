@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Router from "next/router";
 import { MouseEvent, useContext } from "react";
+import { useState } from "react";
 import type CourseInfo from "@/types/CourseInfo";
 import CardCointainer from "./CardCointainer";
 import CardHeader from "./CardHeader";
@@ -12,7 +13,8 @@ import EnrollButton from "./EnrollButton";
 import timeStampToString from "@/utils/timestampToString";
 import AuthContext from "@/context/AuthContext";
 interface Props extends CourseInfo {
-  noEnroll?: boolean;
+  unEnroll?: boolean;
+  deleteCourse?: boolean;
 }
 
 function CourseCard(props: Props) {
@@ -29,7 +31,8 @@ function CourseCard(props: Props) {
     level,
     location,
     trainer,
-    noEnroll = false,
+    unEnroll = false,
+    deleteCourse = false,
   } = props;
 
   async function handleEnroll(e: MouseEvent) {
@@ -67,6 +70,30 @@ function CourseCard(props: Props) {
       }
     } else {
       Router.push("/auth/login");
+    }
+  }
+
+  const [deleteProgression, setDeleteProgression] = useState<number>(0);
+  async function handleDelete() {
+    setDeleteProgression(deleteProgression + 1);
+    if (deleteProgression >= 4) {
+      setDeleteProgression(0);
+      try {
+        const res = await fetch(`/api/course/?id=${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (data.ok) {
+          Router.reload();
+        } else {
+          alert(data.feedback);
+        }
+      } catch (e: any) {
+        alert(e.message);
+      }
     }
   }
 
@@ -125,15 +152,17 @@ function CourseCard(props: Props) {
           {trainer}
         </CardBodyRow>
       </CardBody>
-      {noEnroll ? (
-        <CardFooter>
+      <CardFooter>
+        {unEnroll ? (
           <EnrollButton onClick={handleUnenroll}>Unenroll</EnrollButton>
-        </CardFooter>
-      ) : (
-        <CardFooter>
+        ) : deleteCourse ? (
+          <EnrollButton onClick={handleDelete}>
+            Delete {deleteProgression}/5
+          </EnrollButton>
+        ) : (
           <EnrollButton onClick={handleEnroll}>Enroll</EnrollButton>
-        </CardFooter>
-      )}
+        )}
+      </CardFooter>
     </CardCointainer>
   );
 }
