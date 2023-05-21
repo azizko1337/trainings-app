@@ -42,9 +42,28 @@ function CourseCard(props: Props) {
         },
       });
       const data = await res.json();
-      console.log(data);
       if (data.ok) {
-        Router.push("/courses");
+        await Router.push("/courses");
+        Router.reload();
+      }
+    } else {
+      Router.push("/auth/login");
+    }
+  }
+
+  async function handleUnenroll(e: MouseEvent) {
+    e.preventDefault();
+    if (user) {
+      const res = await fetch(`/api/course/unenroll/?id=${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.ok) {
+        await Router.push("/courses");
+        Router.reload();
       }
     } else {
       Router.push("/auth/login");
@@ -106,7 +125,11 @@ function CourseCard(props: Props) {
           {trainer}
         </CardBodyRow>
       </CardBody>
-      {noEnroll ? null : (
+      {noEnroll ? (
+        <CardFooter>
+          <EnrollButton onClick={handleUnenroll}>Unenroll</EnrollButton>
+        </CardFooter>
+      ) : (
         <CardFooter>
           <EnrollButton onClick={handleEnroll}>Enroll</EnrollButton>
         </CardFooter>

@@ -1,4 +1,11 @@
-import { ChangeEvent, FormEvent, useEffect, useState, useContext } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useState,
+  useContext,
+  MouseEvent,
+} from "react";
 import FormWrapper from "@/components/Layout/Pages/register/FormWrapper";
 import LeftColumn from "@/components/Layout/Pages/register/LeftColumn";
 import RightColumn from "@/components/Layout/Pages/register/RightColumn";
@@ -34,7 +41,7 @@ function Profile() {
       oldPassword: "",
       profileImage: user.profileImage,
     });
-  }, [user]);
+  }, [user, setForm]);
 
   const [errors, setErrors] = useState({
     email: "",
@@ -43,6 +50,7 @@ function Profile() {
     newPassword: "",
     oldPassword: "",
   });
+
   useEffect(() => {
     setErrors({
       email: Validate.email(form.email, true),
@@ -111,6 +119,54 @@ function Profile() {
     );
   }
 
+  const [deleteForm, setDeleteForm] = useState({
+    oldPassword: "",
+  });
+  const [errorsDelete, setErrorsDelete] = useState({
+    oldPassword: "",
+  });
+  useEffect(() => {
+    setErrorsDelete({
+      oldPassword: Validate.deleteOldPassword(deleteForm.oldPassword),
+    });
+  }, [deleteForm, setErrorsDelete]);
+  function handleDeleteChange(e: FormEvent) {
+    const target = e.target as HTMLInputElement;
+    setDeleteForm({
+      oldPassword: target.value,
+    });
+  }
+  function shouldDeletionBeDisabled() {
+    return errorsDelete.oldPassword.length > 0;
+  }
+  const [deleteProgression, setDeleteProgression] = useState(0);
+  const [deleteFeedback, setDeleteFeedback] = useState("");
+  async function handleDeleteProfile(e: MouseEvent) {
+    e.preventDefault();
+    setDeleteProgression(deleteProgression + 1);
+    if (deleteProgression + 1 >= 5) {
+      setDeleteProgression(0);
+      try {
+        const res = await fetch("/api/auth/user", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(deleteForm),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          await Router.push("/");
+          Router.reload();
+        } else {
+          setDeleteFeedback(data.feedback);
+        }
+      } catch (e: any) {
+        setDeleteFeedback("Error communicating with server.");
+      }
+    }
+  }
+
   return (
     <>
       <FormWrapper onSubmit={handleSubmit}>
@@ -169,7 +225,7 @@ function Profile() {
           />
           <Feedback>{feedback}</Feedback>
           <Button type="submit" disabled={shouldSubmitBeDisabled()}>
-            Change
+            Change data
           </Button>
         </LeftColumn>
         <RightColumn>
@@ -180,6 +236,33 @@ function Profile() {
             changeHandler={handleChange}
           />
         </RightColumn>
+      </FormWrapper>
+      <FormWrapper>
+        <LeftColumn>
+          <SubHeader>Delete profile</SubHeader>
+          <span></span>
+          <Input
+            id="deleteOldPassword"
+            type="password"
+            label="Current password"
+            placeholder="Type current password"
+            value={deleteForm.oldPassword}
+            changeHandler={handleDeleteChange}
+            error={errorsDelete.oldPassword}
+          />
+          <Button
+            fixed={true}
+            type="submit"
+            onClick={handleDeleteProfile}
+            disabled={shouldDeletionBeDisabled()}
+          >
+            Delete profile {`${deleteProgression}/5`}
+          </Button>
+          <span></span>
+          <Feedback>{deleteFeedback}</Feedback>
+        </LeftColumn>
+
+        <RightColumn></RightColumn>
       </FormWrapper>
     </>
   );
