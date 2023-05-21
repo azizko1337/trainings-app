@@ -74,6 +74,18 @@ class Validate {
     }
   }
 
+  static ceaseTrainerPassword(oldPassword: string): string {
+    if (oldPassword.length === 0)
+      return "Type old password to cease being a trainer";
+    if (oldPassword.length < 8) {
+      return "Password must be at least 8 characters";
+    } else if (oldPassword.length > 64) {
+      return "Password must be less than 65 characters";
+    } else {
+      return "";
+    }
+  }
+
   static comparePasswords(
     password: string,
     confirmPassword: string,

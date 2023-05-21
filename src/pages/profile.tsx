@@ -185,7 +185,7 @@ function Profile() {
   async function handleBecomeTrainer(e: MouseEvent) {
     e.preventDefault();
     try {
-      const res = await fetch("/api/auth/trainer", {
+      const res = await fetch("/api/auth/trainer/become", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -194,7 +194,6 @@ function Profile() {
       });
       const data = await res.json();
       if (data.ok) {
-        await Router.push("/");
         Router.reload();
       } else {
         setTrainerFeedback(data.feedback);
@@ -208,6 +207,53 @@ function Profile() {
     setTrainerForm({
       code: target.value,
     });
+  }
+
+  const [ceaseForm, setCeaseForm] = useState({
+    oldPassword: "",
+  });
+  const [errorsCease, setErrorsCease] = useState({
+    oldPassword: "",
+  });
+  useEffect(() => {
+    setErrorsCease({
+      oldPassword: Validate.ceaseTrainerPassword(ceaseForm.oldPassword),
+    });
+  }, [ceaseForm, setErrorsCease]);
+  function handleCeaseChange(e: FormEvent) {
+    const target = e.target as HTMLInputElement;
+    setCeaseForm({
+      oldPassword: target.value,
+    });
+  }
+  function shouldCeaseBeDisabled() {
+    return errorsCease.oldPassword.length > 0;
+  }
+  const [ceaseProgression, setCeaseProgression] = useState(0);
+  const [ceaseFeedback, setCeaseFeedback] = useState("");
+  async function handleCeaseBeingTrainer(e: MouseEvent) {
+    e.preventDefault();
+    setCeaseProgression(ceaseProgression + 1);
+    if (ceaseProgression + 1 >= 5) {
+      setCeaseProgression(0);
+      try {
+        const res = await fetch("/api/auth/trainer/cease", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ceaseForm),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          Router.reload();
+        } else {
+          setCeaseFeedback(data.feedback);
+        }
+      } catch (e: any) {
+        setCeaseFeedback("Error communicating with server.");
+      }
+    }
   }
 
   return (
@@ -305,27 +351,55 @@ function Profile() {
           <Feedback>{deleteFeedback}</Feedback>
         </LeftColumn>
         <LeftColumn>
-          <SubHeader>Be trainer</SubHeader>
-          <span></span>
-          <Input
-            id="becomeTrainerCode"
-            type="password"
-            label="Trainer code"
-            placeholder="Type trainer code you got"
-            value={trainerForm.code}
-            changeHandler={handleTrainerChange}
-            error={errorsTrainer.code}
-          />
-          <Button
-            fixed={true}
-            type="submit"
-            onClick={handleBecomeTrainer}
-            disabled={shouldTrainerBeDisabled()}
-          >
-            Become trainer
-          </Button>
-          <span></span>
-          <Feedback>{trainerFeedback}</Feedback>
+          {user?.isTrainer ? (
+            <>
+              <SubHeader>Cease being trainer</SubHeader>
+              <span></span>
+              <Input
+                id="ceaseTrainerOldPassword"
+                type="password"
+                label="Current password"
+                placeholder="Type current password"
+                value={ceaseForm.oldPassword}
+                changeHandler={handleCeaseChange}
+                error={errorsCease.oldPassword}
+              />
+              <Button
+                fixed={true}
+                type="submit"
+                onClick={handleCeaseBeingTrainer}
+                disabled={shouldCeaseBeDisabled()}
+              >
+                Stop being trainer {`${ceaseProgression}/5`}
+              </Button>
+              <span></span>
+              <Feedback>{ceaseFeedback}</Feedback>
+            </>
+          ) : (
+            <>
+              <SubHeader>Be trainer</SubHeader>
+              <span></span>
+              <Input
+                id="becomeTrainerCode"
+                type="text"
+                label="Trainer code"
+                placeholder="Type trainer code you got"
+                value={trainerForm.code}
+                changeHandler={handleTrainerChange}
+                error={errorsTrainer.code}
+              />
+              <Button
+                fixed={true}
+                type="submit"
+                onClick={handleBecomeTrainer}
+                disabled={shouldTrainerBeDisabled()}
+              >
+                Become trainer
+              </Button>
+              <span></span>
+              <Feedback>{trainerFeedback}</Feedback>
+            </>
+          )}
         </LeftColumn>
       </FormWrapper>
     </>

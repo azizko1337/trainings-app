@@ -174,6 +174,87 @@ class UserController {
     }
   }
 
+  static async becomeTrainer(req: NextApiRequest, res: NextApiResponse) {
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
+    }
+    try {
+      if (req.body?.code !== process.env.BECOME_TRAINER_CODE) {
+        throw new Error("Wrong code.");
+      }
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.session.user.id,
+        },
+      });
+      if (!user) {
+        throw new Error("Wrong user.");
+      }
+      if (user.isTrainer) {
+        throw new Error("You are already a trainer.");
+      }
+      try {
+        await prisma.user.update({
+          where: {
+            id: req.session.user.id,
+          },
+          data: {
+            isTrainer: true,
+          },
+        });
+      } catch (e: any) {
+        throw new Error("Database error while becoming trainer.");
+      }
+
+      res
+        .status(200)
+        .json({ ok: true, feedback: "Succesfully became trainer." });
+    } catch (e: any) {
+      return res.status(500).json({ feedback: e.message });
+    }
+  }
+  static async ceaseTrainer(req: NextApiRequest, res: NextApiResponse) {
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
+    }
+    try {
+      const oldPassword = req.body?.oldPassword;
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.session.user.id,
+        },
+      });
+      if (!user) {
+        throw new Error("Wrong user.");
+      }
+      if (!user.isTrainer) {
+        throw new Error("You are not a trainer.");
+      }
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordValid) {
+        throw new Error("Invalid password");
+      }
+
+      try {
+        await prisma.user.update({
+          where: {
+            id: req.session.user.id,
+          },
+          data: {
+            isTrainer: false,
+          },
+        });
+      } catch (e: any) {
+        throw new Error("Database error while ceasing trainer.");
+      }
+      res
+        .status(200)
+        .json({ ok: true, feedback: "Succesfully ceased trainer." });
+    } catch (e: any) {
+      return res.status(500).json({ feedback: e.message });
+    }
+  }
+
   static async login(
     req: NextApiRequest,
     res: NextApiResponse,
