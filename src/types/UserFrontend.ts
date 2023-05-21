@@ -1,10 +1,10 @@
-interface UserFrontend {
+type UserFrontend = {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
-  img: Buffer;
+  profileImage: string;
   isTrainer: boolean;
-}
+} | null;
 
 export default UserFrontend;

@@ -1,20 +1,24 @@
 import styled from "styled-components";
 
 type Props = {
-    thin?: boolean;
-    error?: boolean;
-}
+  thin?: boolean;
+  error?: boolean;
+};
 
 const SubHeader = styled.h2<Props>`
-    font-size: ${({ theme }) => theme.size.XL};
-    color: ${({ theme }) => theme.colors.text};
-    letter-spacing: 1px;
+  font-size: ${({ theme }) => theme.size.XL};
+  color: ${({ theme }) => theme.colors.text};
+  letter-spacing: 1px;
+  word-wrap: break-word;
 
-    ${({error, theme}) => error ? `color: ${theme.colors.error};` : null}
+  ${({ error, theme }) => (error ? `color: ${theme.colors.error};` : null)}
 
-    ${({thin}) => thin ? `
+  ${({ thin }) =>
+    thin
+      ? `
         font-weight: 300;
-    ` : null}
+    `
+      : null}
 `;
 
 export default SubHeader;

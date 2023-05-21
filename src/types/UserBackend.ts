@@ -4,7 +4,7 @@ interface UserBackend {
   firstName: string;
   lastName: string;
   password: string;
-  img: Buffer;
+  profileImage: string;
   isTrainer: boolean;
   createdAt: Date;
   updatedAt: Date;

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CreateCourseBody } from "@/types/controllers/CourseController";
+import CourseInfo from "@/types/CourseInfo";
 
 const prisma = new PrismaClient();
 
@@ -59,6 +60,9 @@ class CourseController {
         throw new Error("Missing course id.");
       }
       const course = await prisma.course.findUnique({
+        include: {
+          trainer: true,
+        },
         where: {
           id,
         },
@@ -66,10 +70,13 @@ class CourseController {
       if (!course) {
         throw new Error("Course not found.");
       }
+      course.trainer = course.trainer.firstName + " " + course.trainer.lastName;
 
-      return res
-        .status(200)
-        .json({ ok: true, feedback: "Course found.", course });
+      return res.status(200).json({
+        ok: true,
+        feedback: "Course found.",
+        course,
+      });
     } catch (e: any) {
       return res.status(500).json({ ok: false, feedback: e.message });
     }
@@ -84,6 +91,9 @@ class CourseController {
     }
     try {
       const courses = await prisma.course.findMany({
+        include: {
+          trainer: true,
+        },
         where: {
           participants: {
             some: {
@@ -94,6 +104,11 @@ class CourseController {
           },
         },
       });
+      courses.forEach(
+        (course) =>
+          (course.trainer =
+            course.trainer.firstName + " " + course.trainer.lastName)
+      );
       return res
         .status(200)
         .json({ ok: true, feedback: "Courses found.", courses });
@@ -112,6 +127,9 @@ class CourseController {
       let courses = [];
       try {
         courses = await prisma.course.findMany({
+          include: {
+            trainer: true,
+          },
           where: {
             trainerId: req.session.user.id,
           },
@@ -119,6 +137,11 @@ class CourseController {
       } catch (e: any) {
         throw new Error("Database error getting courses.");
       }
+      courses.forEach(
+        (course) =>
+          (course.trainer =
+            course.trainer.firstName + " " + course.trainer.lastName)
+      );
       return res
         .status(200)
         .json({ ok: true, feedback: "Courses found.", courses });
@@ -243,9 +266,12 @@ class CourseController {
       try {
         if (req.session?.user) {
           courses = await prisma.course.findMany({
+            include: {
+              trainer: true,
+            },
             where: {
               participants: {
-                some: {
+                none: {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   id: req.session.user.id,
@@ -254,15 +280,26 @@ class CourseController {
             },
           });
         } else {
-          courses = await prisma.course.findMany();
+          courses = await prisma.course.findMany({
+            include: {
+              trainer: true,
+            },
+          });
         }
+        courses.forEach(
+          (course) =>
+            (course.trainer =
+              course.trainer.firstName + " " + course.trainer.lastName)
+        );
       } catch (e: any) {
+        console.log(e);
         throw new Error("Database error getting courses.");
       }
       return res
         .status(200)
         .json({ ok: true, feedback: "Courses found.", courses });
     } catch (e: any) {
+      console.log(e);
       return res.status(500).json({ ok: false, feedback: e.message });
     }
   }

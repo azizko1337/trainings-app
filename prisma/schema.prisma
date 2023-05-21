@@ -10,14 +10,14 @@ generator client {
 model Course {
   id        String      @id @default(uuid())
   name     String
-  startDate Int
-  endDate   Int
+  startDate String
+  endDate   String
   startTime String
   endTime   String
   language String
   location String
   level String
-  courseImage Bytes
+  courseImage String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -33,7 +33,7 @@ model User {
   firstName    String
   lastName     String
   password      String
-  img          Bytes
+  profileImage          String
   isTrainer     Boolean     @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

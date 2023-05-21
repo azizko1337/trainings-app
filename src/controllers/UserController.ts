@@ -36,7 +36,7 @@ class UserController {
             firstName: userData.firstName,
             lastName: userData.lastName,
             password: passwordHash,
-            img: Buffer.from(userData.img),
+            profileImage: userData.profileImage,
           },
         });
       } catch (e: any) {
@@ -60,9 +60,6 @@ class UserController {
           id: req.session.user.id,
         },
       });
-      if (!user) {
-        throw new Error("User not found");
-      }
       user = user as UserBackend;
       if (!user) {
         throw new Error("User not found");
@@ -73,13 +70,18 @@ class UserController {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        img: Buffer.from(user.img),
+        profileImage: user.profileImage,
         isTrainer: user.isTrainer,
       };
 
-      return res.json(userFrontend);
+      return res.json({
+        ok: true,
+        feedback: "Found user.",
+        user: userFrontend,
+      });
     } catch (e: any) {
-      return res.status(500).json({ ok: false, feedback: "User not found" });
+      console.log(e);
+      return res.status(500).json({ ok: false, feedback: "User not found." });
     }
   }
 
@@ -115,7 +117,7 @@ class UserController {
           data: {
             firstName: userData.firstName,
             lastName: userData.lastName,
-            img: Buffer.from(userData.profileImage),
+            profileImage: userData.profileImage,
             password:
               userData.newPassword.length > 0
                 ? await bcrypt.hash(userData.newPassword, 10)
@@ -200,10 +202,11 @@ class UserController {
         throw new Error("Invalid password");
       }
 
-      setSession(req, user as User);
+      await setSession(req, user);
 
       return res.json({ ok: true });
     } catch (e: any) {
+      console.log(e);
       return res.status(500).json({ feedback: e.message });
     }
   }

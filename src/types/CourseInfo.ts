@@ -1,15 +1,15 @@
 type CourseInfo = {
-    id: string;
-    img: string;
-    title: string;
-    startDate: number;
-    endDate: number;
-    startTime: string;
-    endTime: string;
-    level: string;
-    location: string;
-    trainer: string;
-    trainerId: string;
-}
+  id: string;
+  courseImage: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  level: string;
+  location: string;
+  trainer: string;
+  trainerId: string;
+};
 
 export default CourseInfo;

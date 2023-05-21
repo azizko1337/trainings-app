@@ -4,7 +4,7 @@ type User = {
   firstName: string;
   lastName: string;
   password: string;
-  img: Buffer;
+  profileImage: string;
   isTrainer: boolean;
   createdAt: Date;
   updatedAt: Date;
