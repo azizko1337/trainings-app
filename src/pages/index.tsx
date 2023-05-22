@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Inter } from "@next/font/google";
 import Image from "next/image";
 import Header from "@/components/Text/Header";
 import type CourseInfo from "@/types/CourseInfo";
@@ -11,8 +10,6 @@ import Input from "@/components/Form/Input/Input";
 import type Filters from "@/types/Filters";
 import type { ChangeEvent } from "react";
 import filterCourses from "@/utils/filterCourses";
-
-const inter = Inter({ subsets: ["latin"] });
 
 function Index() {
   const [courses, setCourses] = useState<CourseInfo[]>([]);
