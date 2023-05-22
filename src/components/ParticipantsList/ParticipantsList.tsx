@@ -23,8 +23,11 @@ const ParticipantsList = ({
       </MailToAll>
 
       <ParticipantsListContainer>
-        {participants.map((participant: UserFrontend) => (
-          <Participant participant={participant} />
+        {participants.map((participant: UserFrontend, index: number) => (
+          <Participant
+            key={"participant" + index + participant?.id}
+            participant={participant}
+          />
         ))}
       </ParticipantsListContainer>
     </>
