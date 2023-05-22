@@ -6,6 +6,7 @@ import Filter from "./Filter/Filter";
 import NavContainer from "./Filter/Options/NavContainer";
 import Button from "../Form/Button";
 import type Filters from "@/types/Filters";
+import TouchAnywhere from "../Utils/TouchAnywhere";
 
 type Props = {
   courses: CourseInfo[];
@@ -82,6 +83,7 @@ function FiltersMenu(props: Props) {
         options={removeDuplicates(courses.map((course) => course.trainer))}
       />
       <NavContainer>
+        <TouchAnywhere onClick={handleClose} />
         <Button
           mini
           onClick={() =>
@@ -94,10 +96,7 @@ function FiltersMenu(props: Props) {
             })
           }
         >
-          reset
-        </Button>
-        <Button mini onClick={handleClose}>
-          X
+          reset all
         </Button>
       </NavContainer>
     </FiltersContainer>

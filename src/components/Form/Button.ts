@@ -13,6 +13,8 @@ const Button = styled.button<Props>`
   font-size: ${({ theme }) => theme.size.M};
   transition: background-color 0.1s;
   color: ${({ theme }) => theme.colors.text};
+  z-index: 5;
+  position: relative;
 
   &:hover {
     cursor: pointer;

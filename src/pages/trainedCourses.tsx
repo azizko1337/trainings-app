@@ -53,7 +53,9 @@ function TrainedCourses() {
           changeHandler={handleSearch}
           error={""}
         />
-        <Button onClick={() => setShowFiltersMenu(true)}>Filters</Button>
+        <Button onClick={() => setShowFiltersMenu(!showFiltersMenu)}>
+          {showFiltersMenu ? "Close" : "Filters"}
+        </Button>
         <FiltersMenu
           show={showFiltersMenu}
           handleClose={() => setShowFiltersMenu(false)}

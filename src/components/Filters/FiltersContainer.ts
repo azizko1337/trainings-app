@@ -1,33 +1,34 @@
 import styled from "styled-components";
 
 type Props = {
-    show: boolean;
-}
+  show: boolean;
+};
 
 const FiltersContainer = styled.ul<Props>`
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    
-    width: 30%;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
 
-    background-color: ${props => props.theme.colors.primary};
-    border: 3px solid ${props => props.theme.colors.secondary};;
-    border-radius: 5px;
+  width: 30%;
 
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
-    
-    @media(orientation: portrait){
-        width:90%;
-    }
+  background-color: ${(props) => props.theme.colors.primary};
 
-    display: none;
-    ${props => props.show ? `
+  position: absolute;
+  top: 95%;
+  right: 90px;
+  z-index: 1;
+
+  @media (orientation: portrait) {
+    width: calc(100% - 90px);
+  }
+
+  display: none;
+  ${(props) =>
+    props.show
+      ? `
         display: flex;
-    ` : null}
-`
+    `
+      : null}
+`;
 
 export default FiltersContainer;

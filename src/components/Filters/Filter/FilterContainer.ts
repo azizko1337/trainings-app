@@ -1,21 +1,22 @@
 import styled from "styled-components";
 
 const FilterContainer = styled.li`
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  z-index: 6;
 
-    padding: 5px;
-    
-    cursor: pointer;
+  padding: 5px;
 
-    font-size: ${({theme}) => theme.size.M};
+  cursor: pointer;
 
-    z-index:1;
+  font-size: ${({ theme }) => theme.size.M};
 
-    &:hover{
-        background-color: ${props => props.theme.colors.secondary};
-        color: ${props => props.theme.colors.background};
-    }
+  z-index: 1;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.secondary};
+    color: ${(props) => props.theme.colors.background};
+  }
 `;
 
 export default FilterContainer;
