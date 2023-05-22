@@ -11,7 +11,6 @@ import AuthContext from "@/context/AuthContext";
 export default function App({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<UserFrontend>(null);
   useEffect(() => {
-    console.log("FECZ");
     fetch("/api/auth/user", {
       method: "GET",
     }).then((res) =>

@@ -9,7 +9,6 @@ import Router from "next/router";
 function UserMenu() {
   const { user } = useContext(AuthContext);
   const [showOptions, setShowOptions] = useState(false);
-  console.log(user);
 
   async function handleLogout(e: MouseEvent) {
     e.preventDefault();
