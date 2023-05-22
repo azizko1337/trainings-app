@@ -8,7 +8,7 @@ declare module "iron-session" {
 
 export const ironOptions = {
   cookieName: "trainingsapp-session",
-  password: process.env.SESSION_PASSWORD,
+  password: process.env.SESSION_PASSWORD as string,
   // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
