@@ -78,7 +78,9 @@ function Profile() {
         if (reader.result === null) return;
         setForm({ ...form, profileImage: reader.result as string });
       };
-      reader.readAsDataURL(file);
+      try {
+        reader.readAsDataURL(file);
+      } catch (err: any) {}
 
       return;
     }

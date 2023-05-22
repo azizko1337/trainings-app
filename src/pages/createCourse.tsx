@@ -50,7 +50,9 @@ function CreateCourse() {
         if (reader.result === null) return;
         setForm({ ...form, courseImage: reader.result as string });
       };
-      reader.readAsDataURL(file);
+      try {
+        reader.readAsDataURL(file);
+      } catch (err) {}
     } else {
       setForm({ ...form, [id]: target.value });
     }
