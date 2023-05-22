@@ -80,7 +80,6 @@ class UserController {
         user: userFrontend,
       });
     } catch (e: any) {
-      console.log(e);
       return res.status(500).json({ ok: false, feedback: "User not found." });
     }
   }
@@ -287,7 +286,6 @@ class UserController {
 
       return res.json({ ok: true });
     } catch (e: any) {
-      console.log(e);
       return res.status(500).json({ feedback: e.message });
     }
   }

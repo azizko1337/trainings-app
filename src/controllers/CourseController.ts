@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CreateCourseBody } from "@/types/controllers/CourseController";
+import type CourseInfo from "@/types/CourseInfo";
 
 const prisma = new PrismaClient();
 
@@ -54,7 +55,7 @@ class CourseController {
       return res.status(500).json({ feedback: "You are not logged in." });
     }
     try {
-      const id: string = req.query?.id as string;
+      const id = req.query?.id as string;
       if (!id) {
         throw new Error("Missing course id.");
       }
@@ -69,12 +70,16 @@ class CourseController {
       if (!course) {
         throw new Error("Course not found.");
       }
-      course.trainer = course.trainer.firstName + " " + course.trainer.lastName;
+
+      const returnCourse: CourseInfo = {
+        ...course,
+        trainer: course.trainer.firstName + " " + course.trainer.lastName,
+      };
 
       return res.status(200).json({
         ok: true,
         feedback: "Course found.",
-        course,
+        course: returnCourse,
       });
     } catch (e: any) {
       return res.status(500).json({ ok: false, feedback: e.message });
@@ -139,21 +144,22 @@ class CourseController {
         where: {
           participants: {
             some: {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // eslint-disable-next-line
               // @ts-ignore
               id: req.session.user.id,
             },
           },
         },
       });
-      courses.forEach(
-        (course) =>
-          (course.trainer =
-            course.trainer.firstName + " " + course.trainer.lastName)
-      );
+      const returnCourses: CourseInfo[] = courses.map((course) => {
+        return {
+          ...course,
+          trainer: course.trainer.firstName + " " + course.trainer.lastName,
+        };
+      });
       return res
         .status(200)
-        .json({ ok: true, feedback: "Courses found.", courses });
+        .json({ ok: true, feedback: "Courses found.", courses: returnCourses });
     } catch (e: any) {
       return res.status(500).json({ ok: false, feedback: e.message });
     }
@@ -179,14 +185,17 @@ class CourseController {
       } catch (e: any) {
         throw new Error("Database error getting courses.");
       }
-      courses.forEach(
-        (course) =>
-          (course.trainer =
-            course.trainer.firstName + " " + course.trainer.lastName)
-      );
+
+      const returnCourses: CourseInfo[] = courses.map((course) => {
+        return {
+          ...course,
+          trainer: course.trainer.firstName + " " + course.trainer.lastName,
+        };
+      });
+
       return res
         .status(200)
-        .json({ ok: true, feedback: "Courses found.", courses });
+        .json({ ok: true, feedback: "Courses found.", courses: returnCourses });
     } catch (e: any) {
       return res.status(500).json({ ok: false, feedback: e.message });
     }
@@ -227,7 +236,7 @@ class CourseController {
           data: {
             participants: {
               connect: {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line
                 // @ts-ignore
                 id: req.session.user.id,
               },
@@ -235,7 +244,6 @@ class CourseController {
           },
         });
       } catch (e: any) {
-        console.log(e);
         throw new Error("Database error enrolling in course.");
       }
 
@@ -282,7 +290,7 @@ class CourseController {
           data: {
             participants: {
               disconnect: {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line
                 // @ts-ignore
                 id: req.session.user.id,
               },
@@ -290,7 +298,6 @@ class CourseController {
           },
         });
       } catch (e: any) {
-        console.log(e);
         throw new Error("Database error unenrolling in course.");
       }
 
@@ -314,7 +321,7 @@ class CourseController {
             where: {
               participants: {
                 none: {
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // eslint-disable-next-line
                   // @ts-ignore
                   id: req.session.user.id,
                 },
@@ -328,20 +335,20 @@ class CourseController {
             },
           });
         }
-        courses.forEach(
-          (course) =>
-            (course.trainer =
-              course.trainer.firstName + " " + course.trainer.lastName)
-        );
+        const returnCourses: CourseInfo[] = courses.map((course) => {
+          return {
+            ...course,
+            trainer: course.trainer.firstName + " " + course.trainer.lastName,
+          };
+        });
+        courses = returnCourses;
       } catch (e: any) {
-        console.log(e);
         throw new Error("Database error getting courses.");
       }
       return res
         .status(200)
         .json({ ok: true, feedback: "Courses found.", courses });
     } catch (e: any) {
-      console.log(e);
       return res.status(500).json({ ok: false, feedback: e.message });
     }
   }
