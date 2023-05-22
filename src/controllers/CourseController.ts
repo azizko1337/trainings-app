@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CreateCourseBody } from "@/types/controllers/CourseController";
-import CourseInfo from "@/types/CourseInfo";
 
 const prisma = new PrismaClient();
 
@@ -76,6 +75,49 @@ class CourseController {
         ok: true,
         feedback: "Course found.",
         course,
+      });
+    } catch (e: any) {
+      return res.status(500).json({ ok: false, feedback: e.message });
+    }
+  }
+
+  static async getParticipants(req: NextApiRequest, res: NextApiResponse) {
+    if (!req.session?.user) {
+      return res.status(500).json({ feedback: "You are not logged in." });
+    }
+    try {
+      const id: string = req.query?.id as string;
+      if (!id) {
+        throw new Error("Missing course id.");
+      }
+      const course = await prisma.course.findUnique({
+        include: {
+          participants: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              isTrainer: true,
+              profileImage: true,
+            },
+          },
+        },
+        where: {
+          id,
+        },
+      });
+      if (!course) {
+        throw new Error("Course not found.");
+      }
+      if (course.trainerId !== req.session.user.id) {
+        throw new Error("You are not the trainer of this course.");
+      }
+
+      return res.status(200).json({
+        ok: true,
+        feedback: "Participants found.",
+        participants: course.participants,
       });
     } catch (e: any) {
       return res.status(500).json({ ok: false, feedback: e.message });

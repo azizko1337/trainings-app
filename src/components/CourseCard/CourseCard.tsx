@@ -12,6 +12,8 @@ import CardFooter from "./CardFooter";
 import EnrollButton from "./EnrollButton";
 import timeStampToString from "@/utils/timestampToString";
 import AuthContext from "@/context/AuthContext";
+import Link from "next/link";
+
 interface Props extends CourseInfo {
   unEnroll?: boolean;
   deleteCourse?: boolean;
@@ -99,12 +101,14 @@ function CourseCard(props: Props) {
 
   return (
     <CardCointainer>
-      <CardHeader>
-        <div>
-          <Image src={courseImage} alt="title" width={115} height={115} />
-        </div>
-        <SubHeader thin>{name}</SubHeader>
-      </CardHeader>
+      <Link href={`/course/${id}`}>
+        <CardHeader>
+          <div>
+            <Image src={courseImage} alt="title" width={115} height={115} />
+          </div>
+          <SubHeader thin>{name}</SubHeader>
+        </CardHeader>
+      </Link>
       <CardBody>
         <CardBodyRow>
           <Image

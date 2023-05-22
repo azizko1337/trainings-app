@@ -8,6 +8,7 @@ type CourseInfo = {
   endTime: string;
   level: string;
   location: string;
+  language: "pl" | "en";
   trainer: string;
   trainerId: string;
 };

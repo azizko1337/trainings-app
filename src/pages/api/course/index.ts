@@ -29,6 +29,11 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
         req,
         res as NextApiResponse<ResData>
       );
+    case "PUT":
+      return await CourseController.update(
+        req,
+        res as NextApiResponse<ResData>
+      );
     default:
       return res
         .status(405)

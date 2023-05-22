@@ -42,7 +42,7 @@ function TrainedCourses() {
 
   return (
     <>
-      <Header mainPage>My courses: </Header>
+      <Header mainPage>My courses (trained by me): </Header>
       <menu>
         <Input
           id="searchCourse"
