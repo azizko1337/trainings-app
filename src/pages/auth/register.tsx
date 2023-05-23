@@ -95,11 +95,11 @@ function Register() {
 
   function shouldSubmitBeDisabled() {
     return (
-      (form.email.length == 0 &&
-        form.firstName.length == 0 &&
-        form.lastName.length == 0 &&
-        form.password.length == 0 &&
-        form.passwordConfirm.length == 0) ||
+      form.email.length == 0 ||
+      form.firstName.length == 0 ||
+      form.lastName.length == 0 ||
+      form.password.length == 0 ||
+      form.passwordConfirm.length == 0 ||
       errors.email.length > 0 ||
       errors.firstName.length > 0 ||
       errors.lastName.length > 0 ||

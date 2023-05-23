@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect, ChangeEvent, FormEvent } from "react";
 import Router from "next/router";
+import CourseValidate from "@/utils/CourseValidate";
 import AuthContext from "@/context/AuthContext";
 import type CourseInfo from "@/types/CourseInfo";
 import SubHeader from "@/components/Text/SubHeader";
@@ -65,6 +66,28 @@ const CoursePage = () => {
     level: "easy",
     courseImage: "/default-placeholder.png",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    language: "",
+    location: "",
+    level: "",
+  });
+  useEffect(() => {
+    setErrors({
+      name: CourseValidate.courseName(form.name),
+      startDate: CourseValidate.startDate(form.startDate),
+      endDate: CourseValidate.endDate(form.startDate, form.endDate),
+      startTime: CourseValidate.time(form.startTime),
+      endTime: CourseValidate.time(form.endTime),
+      language: CourseValidate.language(form.language),
+      location: CourseValidate.location(form.location),
+      level: CourseValidate.level(form.level),
+    });
+  }, [form, setErrors]);
 
   function handleChange(e: ChangeEvent) {
     const target = e.target as HTMLInputElement;
@@ -113,6 +136,27 @@ const CoursePage = () => {
     }
   }
 
+  function shouldSubmitBeDisabled() {
+    return !(
+      form.endDate.length > 0 &&
+      form.endTime.length > 0 &&
+      form.language.length > 0 &&
+      form.level.length > 0 &&
+      form.location.length > 0 &&
+      form.name.length > 0 &&
+      form.startDate.length > 0 &&
+      form.startTime.length > 0 &&
+      (errors.name !== "" ||
+        errors.startDate !== "" ||
+        errors.endDate !== "" ||
+        errors.startTime !== "" ||
+        errors.endTime !== "" ||
+        errors.language !== "" ||
+        errors.location !== "" ||
+        errors.level !== "")
+    );
+  }
+
   if (course?.trainerId === user?.id && user?.isTrainer === true)
     return (
       <>
@@ -127,7 +171,7 @@ const CoursePage = () => {
               placeholder="Type name"
               value={form.name}
               changeHandler={handleChange}
-              error={""}
+              error={errors.name}
             />
             <span></span>
             <Input
@@ -137,7 +181,7 @@ const CoursePage = () => {
               placeholder=""
               value={new Date(+form.startDate).toISOString().split("T")[0]}
               changeHandler={handleChange}
-              error={""}
+              error={errors.startDate}
             />
             <Input
               id="endDate"
@@ -146,7 +190,7 @@ const CoursePage = () => {
               placeholder=""
               value={new Date(+form.endDate).toISOString().split("T")[0]}
               changeHandler={handleChange}
-              error={""}
+              error={errors.endDate}
             />
             <Input
               id="startTime"
@@ -155,7 +199,7 @@ const CoursePage = () => {
               placeholder=""
               value={form.startTime}
               changeHandler={handleChange}
-              error={""}
+              error={errors.startTime}
             />
             <Input
               id="endTime"
@@ -164,7 +208,7 @@ const CoursePage = () => {
               placeholder=""
               value={form.endTime}
               changeHandler={handleChange}
-              error={""}
+              error={errors.endTime}
             />
             <Fieldset id="language">
               <Legend>Language</Legend>
@@ -193,7 +237,7 @@ const CoursePage = () => {
                 </div>
               </FieldsWrapper>
             </Fieldset>
-            <span></span>
+            <Feedback>{errors.language}</Feedback>
             <Input
               id="location"
               type="text"
@@ -201,7 +245,7 @@ const CoursePage = () => {
               placeholder="Type location"
               value={form.location}
               changeHandler={handleChange}
-              error={""}
+              error={errors.language}
             />
             <Select
               id="level"
@@ -209,6 +253,7 @@ const CoursePage = () => {
               value={form.level}
               options={["easy", "medium", "hard"]}
               changeHandler={handleChange}
+              error={errors.level}
             />
             <Feedback>{feedback}</Feedback>
             <Button type="submit">Update course</Button>

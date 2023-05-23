@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Router from "next/router";
 import SubHeader from "@/components/Text/SubHeader";
 import Input from "@/components/Form/Input/Input";
@@ -13,6 +13,7 @@ import Select from "@/components/Form/Select/Select";
 import Button from "@/components/Form/Button";
 import ImageInput from "@/components/Form/ImageInput/ImageInput";
 import Feedback from "@/components/Form/Feedback";
+import CourseValidate from "@/utils/CourseValidate";
 import type { FormEvent } from "react";
 
 function CreateCourse() {
@@ -28,6 +29,28 @@ function CreateCourse() {
     level: "easy",
     courseImage: "/default-placeholder.png",
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    language: "",
+    location: "",
+    level: "",
+  });
+  useEffect(() => {
+    setErrors({
+      name: CourseValidate.courseName(form.name),
+      startDate: CourseValidate.startDate(form.startDate),
+      endDate: CourseValidate.endDate(form.startDate, form.endDate),
+      startTime: CourseValidate.time(form.startTime),
+      endTime: CourseValidate.time(form.endTime),
+      language: CourseValidate.language(form.language),
+      location: CourseValidate.location(form.location),
+      level: CourseValidate.level(form.level),
+    });
+  }, [form, setErrors]);
 
   function handleChange(e: ChangeEvent) {
     const target = e.target as HTMLInputElement;
@@ -76,6 +99,27 @@ function CreateCourse() {
     }
   }
 
+  function shouldSubmitBeDisabled() {
+    return !(
+      form.endDate.length > 0 &&
+      form.endTime.length > 0 &&
+      form.language.length > 0 &&
+      form.level.length > 0 &&
+      form.location.length > 0 &&
+      form.name.length > 0 &&
+      form.startDate.length > 0 &&
+      form.startTime.length > 0 &&
+      (errors.name !== "" ||
+        errors.startDate !== "" ||
+        errors.endDate !== "" ||
+        errors.startTime !== "" ||
+        errors.endTime !== "" ||
+        errors.language !== "" ||
+        errors.location !== "" ||
+        errors.level !== "")
+    );
+  }
+
   return (
     <>
       <FormWrapper onSubmit={handleSubmit}>
@@ -89,7 +133,7 @@ function CreateCourse() {
             placeholder="Type name"
             value={form.name}
             changeHandler={handleChange}
-            error={""}
+            error={errors.name}
           />
           <span></span>
           <Input
@@ -99,7 +143,7 @@ function CreateCourse() {
             placeholder=""
             value={new Date(+form.startDate).toISOString().split("T")[0]}
             changeHandler={handleChange}
-            error={""}
+            error={errors.startDate}
           />
           <Input
             id="endDate"
@@ -108,7 +152,7 @@ function CreateCourse() {
             placeholder=""
             value={new Date(+form.endDate).toISOString().split("T")[0]}
             changeHandler={handleChange}
-            error={""}
+            error={errors.endDate}
           />
           <Input
             id="startTime"
@@ -117,7 +161,7 @@ function CreateCourse() {
             placeholder=""
             value={form.startTime}
             changeHandler={handleChange}
-            error={""}
+            error={errors.startTime}
           />
           <Input
             id="endTime"
@@ -126,7 +170,7 @@ function CreateCourse() {
             placeholder=""
             value={form.endTime}
             changeHandler={handleChange}
-            error={""}
+            error={errors.endTime}
           />
           <Fieldset id="language">
             <Legend>Language</Legend>
@@ -155,7 +199,7 @@ function CreateCourse() {
               </div>
             </FieldsWrapper>
           </Fieldset>
-          <span></span>
+          <Feedback>{errors.language}</Feedback>
           <Input
             id="location"
             type="text"
@@ -163,7 +207,7 @@ function CreateCourse() {
             placeholder="Type location"
             value={form.location}
             changeHandler={handleChange}
-            error={""}
+            error={errors.location}
           />
           <Select
             id="level"
@@ -171,9 +215,12 @@ function CreateCourse() {
             value={form.level}
             options={["easy", "medium", "hard"]}
             changeHandler={handleChange}
+            error={errors.level}
           />
           <Feedback>{feedback}</Feedback>
-          <Button type="submit">Add course</Button>
+          <Button type="submit" disabled={shouldSubmitBeDisabled()}>
+            Add course
+          </Button>
         </LeftColumn>
         <RightColumn>
           <ImageInput
