@@ -49,7 +49,7 @@ async function validateCourse(course: CreateCourseBody): Promise<string> {
     return "Level must be easy, medium or hard";
   }
 
-  if (!(await isBase64UrlImage(courseImage))) {
+  if (!isBase64UrlImage(courseImage)) {
     return "Course image is invalid";
   }
 

@@ -24,7 +24,7 @@ async function validateRegister(user: User): Promise<string> {
     return "Password must be between 8 and 64 characters";
   }
 
-  if (!(await isBase64UrlImage(profileImage))) {
+  if (!isBase64UrlImage(profileImage)) {
     return "Profile image is invalid";
   }
 
