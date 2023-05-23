@@ -4,6 +4,7 @@
 
 - Next.js
 - Prisma
+- Styled components
 - Iron session, bcrypt
 - Postgres
 - Jest
