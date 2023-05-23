@@ -58,7 +58,7 @@ function CreateCourse() {
 
     if (id === "startDate" || id === "endDate") {
       const date = new Date(target.value);
-      const timestamp = date.getTime();
+      const timestamp = String(date.getTime());
       setForm({ ...form, [id]: timestamp });
     } else if (id === "en" || id === "pl") {
       const name: string = target.name;

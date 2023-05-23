@@ -2,7 +2,6 @@ import UserController from "@/controllers/UserController";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "@/lib/config";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type User from "@/types/User";
 
 type ResData = {
   ok: boolean;
@@ -10,16 +9,11 @@ type ResData = {
 };
 
 async function userRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
-  const userData: User = req.body;
   switch (req.method) {
     case "GET":
       return await UserController.read(req, res as NextApiResponse<ResData>);
     case "POST":
-      return await UserController.create(
-        req,
-        res as NextApiResponse<ResData>,
-        userData
-      );
+      return await UserController.create(req, res as NextApiResponse<ResData>);
     case "PUT":
       return await UserController.update(req, res as NextApiResponse<ResData>);
     case "DELETE":
