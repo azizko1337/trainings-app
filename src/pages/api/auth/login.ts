@@ -8,6 +8,12 @@ type ResData = {
   name: string;
 };
 
+export const config = {
+  api: {
+    responseLimit: "4mb",
+  },
+};
+
 async function loginRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
   const userData: User = req.body;
   switch (req.method) {

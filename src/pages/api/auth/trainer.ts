@@ -9,6 +9,12 @@ type ResData = {
   feedback: string;
 };
 
+export const config = {
+  api: {
+    responseLimit: "4mb",
+  },
+};
+
 async function trainerRoute(
   req: NextApiRequest,
   res: NextApiResponse<ResData>

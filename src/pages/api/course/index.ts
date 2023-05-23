@@ -44,7 +44,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "10mb",
+      sizeLimit: "11mb",
     },
   },
 };

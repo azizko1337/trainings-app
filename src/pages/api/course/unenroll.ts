@@ -10,12 +10,26 @@ type ResData = {
   course?: Course;
 };
 
-async function unenrollRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
-  switch(req.method){
+export const config = {
+  api: {
+    responseLimit: "4mb",
+  },
+};
+
+async function unenrollRoute(
+  req: NextApiRequest,
+  res: NextApiResponse<ResData>
+) {
+  switch (req.method) {
     case "GET":
-      return await CourseController.unenroll(req, res as NextApiResponse<ResData>);
+      return await CourseController.unenroll(
+        req,
+        res as NextApiResponse<ResData>
+      );
     default:
-      return res.status(405).json({ok: false, feedback: "Method not allowed."});
+      return res
+        .status(405)
+        .json({ ok: false, feedback: "Method not allowed." });
   }
 }
 

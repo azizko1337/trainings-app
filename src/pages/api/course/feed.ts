@@ -10,6 +10,12 @@ type ResData = {
   courses?: Course;
 };
 
+export const config = {
+  api: {
+    responseLimit: "30mb",
+  },
+};
+
 async function feedRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
   switch (req.method) {
     case "GET":

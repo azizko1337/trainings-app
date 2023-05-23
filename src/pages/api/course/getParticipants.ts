@@ -4,6 +4,12 @@ import { ironOptions } from "@/lib/config";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Course } from "@prisma/client";
 
+export const config = {
+  api: {
+    responseLimit: "30mb",
+  },
+};
+
 type ResData = {
   ok: boolean;
   feedback: string;

@@ -7,6 +7,12 @@ type ResData = {
   name: string;
 };
 
+export const config = {
+  api: {
+    responseLimit: "4mb",
+  },
+};
+
 async function deleteRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
   switch (req.method) {
     case "POST":

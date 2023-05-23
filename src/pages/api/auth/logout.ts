@@ -8,9 +8,15 @@ type Data = {
   name: string;
 };
 
+export const config = {
+  api: {
+    responseLimit: "4mb",
+  },
+};
+
 async function logoutRoute(req: NextApiRequest, res: NextApiResponse<Data>) {
   const userData: User = req.body;
-  switch(req.method){
+  switch (req.method) {
     case "GET":
       return await UserController.logout(req, res);
       break;

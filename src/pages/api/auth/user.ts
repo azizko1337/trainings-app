@@ -8,6 +8,12 @@ type ResData = {
   feedback: string;
 };
 
+export const config = {
+  api: {
+    responseLimit: "11mb",
+  },
+};
+
 async function userRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
   switch (req.method) {
     case "GET":
@@ -24,13 +30,5 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse<ResData>) {
         .json({ ok: false, feedback: "Method not allowed." });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "10mb",
-    },
-  },
-};
 
 export default withIronSessionApiRoute(userRoute, ironOptions);
