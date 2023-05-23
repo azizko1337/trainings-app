@@ -14,6 +14,7 @@
 
 - Change .env data, then run following commands:
 - `npm install`
+- `npx prisma db push`
 - `npm run test`
 - `npm run build`
 - `npm start`
