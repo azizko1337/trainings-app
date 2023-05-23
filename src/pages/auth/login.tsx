@@ -67,7 +67,8 @@ function Login() {
 
   function shouldSubmitBeDisabled() {
     return (
-      (form.email.length == 0 && form.password.length == 0) ||
+      form.email.length == 0 ||
+      form.password.length == 0 ||
       errors.email.length > 0 ||
       errors.password.length > 0
     );
