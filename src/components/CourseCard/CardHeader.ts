@@ -8,19 +8,18 @@ const CardHeader = styled.div`
 
   & > * {
     height: 100%;
-    flex-basis: 50%;
+    flex-basis: 60%;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     text-align: center;
-    word-wrap: wrap;
-    word-break: break-word;
   }
 
   & > div {
     position: relative;
+    flex-basis: 40%;
   }
 `;
 
