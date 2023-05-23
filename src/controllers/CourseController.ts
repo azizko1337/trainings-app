@@ -433,21 +433,28 @@ class CourseController {
       if (course.trainerId !== req.session.user.id) {
         throw new Error("You are not the trainer of this course.");
       }
+
+      const newCourse: CreateCourseBody = req.body;
+      const validationFeedback = await validateCourse(newCourse);
+      if (validationFeedback.length > 0) {
+        throw new Error(validationFeedback);
+      }
+
       try {
         await prisma.course.update({
           where: {
             id,
           },
           data: {
-            name: req.body.name,
-            startDate: req.body.startDate,
-            endDate: req.body.endDate,
-            startTime: req.body.startTime,
-            endTime: req.body.endTime,
-            language: req.body.language,
-            location: req.body.location,
-            level: req.body.level,
-            courseImage: req.body.courseImage,
+            name: newCourse.name,
+            startDate: newCourse.startDate,
+            endDate: newCourse.endDate,
+            startTime: newCourse.startTime,
+            endTime: newCourse.endTime,
+            language: newCourse.language,
+            location: newCourse.location,
+            level: newCourse.level,
+            courseImage: newCourse.courseImage,
           },
         });
       } catch (e: any) {
