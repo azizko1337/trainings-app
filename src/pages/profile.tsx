@@ -18,6 +18,7 @@ import Validate from "@/utils/Validate";
 import type ProfileForm from "@/types/ProfileForm";
 import AuthContext from "@/context/AuthContext";
 import Router from "next/router";
+import NoAuth from "@/components/Utils/NoAuth";
 
 function Profile() {
   const { user } = useContext(AuthContext);
@@ -257,6 +258,8 @@ function Profile() {
       }
     }
   }
+
+  if (!user) return <NoAuth />;
 
   return (
     <>

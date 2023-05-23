@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState, useContext } from "react";
 import FormWrapper from "@/components/Layout/Pages/register/FormWrapper";
 import LeftColumn from "@/components/Layout/Pages/register/LeftColumn";
 import RightColumn from "@/components/Layout/Pages/register/RightColumn";
@@ -9,8 +9,12 @@ import Feedback from "@/components/Form/Feedback";
 import ImageInput from "@/components/Form/ImageInput/ImageInput";
 import Validate from "@/utils/Validate";
 import Router from "next/router";
+import AuthContext from "@/context/AuthContext";
+import AlreadyLoggedIn from "@/components/Utils/AlreadyLoggedIn";
 
 function Register() {
+  const { user } = useContext(AuthContext);
+
   const [form, setForm] = useState({
     email: "",
     firstName: "",
@@ -107,6 +111,8 @@ function Register() {
       errors.passwordConfirm.length > 0
     );
   }
+
+  if (user) return <AlreadyLoggedIn />;
 
   return (
     <>

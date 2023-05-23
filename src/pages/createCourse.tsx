@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, useContext } from "react";
 import Router from "next/router";
 import SubHeader from "@/components/Text/SubHeader";
 import Input from "@/components/Form/Input/Input";
@@ -15,8 +15,13 @@ import ImageInput from "@/components/Form/ImageInput/ImageInput";
 import Feedback from "@/components/Form/Feedback";
 import CourseValidate from "@/utils/CourseValidate";
 import type { FormEvent } from "react";
+import AuthContext from "@/context/AuthContext";
+import NoAuth from "@/components/Utils/NoAuth";
+import NoPermission from "@/components/Utils/NoPermission";
 
 function CreateCourse() {
+  const { user } = useContext(AuthContext);
+
   const [feedback, setFeedback] = useState("");
   const [form, setForm] = useState({
     name: "",
@@ -119,6 +124,9 @@ function CreateCourse() {
       errors.level === ""
     );
   }
+
+  if (!user) return <NoAuth />;
+  if (!user.isTrainer) return <NoPermission />;
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import Router from "next/router";
 import FormWrapper from "@/components/Layout/Pages/login/FormWrapper";
@@ -9,9 +9,11 @@ import SubHeader from "@/components/Text/SubHeader";
 import ButtonToLeft from "@/components/Layout/Pages/login/ButtonToLeft";
 import Feedback from "@/components/Form/Feedback";
 import Validate from "@/utils/Validate";
+import AuthContext from "@/context/AuthContext";
+import AlreadyLoggedIn from "@/components/Utils/AlreadyLoggedIn";
 
 function Login() {
-  const router = useRouter();
+  const { user } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: "",
@@ -73,6 +75,8 @@ function Login() {
       errors.password.length > 0
     );
   }
+
+  if (user) return <AlreadyLoggedIn />;
 
   return (
     <FormWrapper onSubmit={submitForm}>
