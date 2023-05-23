@@ -97,7 +97,7 @@ function CreateCourse() {
     });
     const data = await res.json();
     if (data.ok) {
-      await Router.push("/mycourses");
+      await Router.push("/trainedCourses");
       Router.reload();
     } else {
       setFeedback(data.feedback);
