@@ -169,6 +169,14 @@ class UserController {
         throw new Error("Database error while deleting user.");
       }
 
+      try {
+        await prisma.course.deleteMany({
+          where: {
+            trainerId: req.session.user.id,
+          },
+        });
+      } catch (error) {}
+
       req.session.destroy();
       return res.json({ ok: true });
     } catch (e: any) {
@@ -250,6 +258,15 @@ class UserController {
       } catch (e: any) {
         throw new Error("Database error while ceasing trainer.");
       }
+
+      try {
+        await prisma.course.deleteMany({
+          where: {
+            trainerId: req.session.user.id,
+          },
+        });
+      } catch (error) {}
+
       res
         .status(200)
         .json({ ok: true, feedback: "Succesfully ceased trainer." });

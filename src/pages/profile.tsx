@@ -149,8 +149,8 @@ function Profile() {
     if (deleteProgression + 1 >= 5) {
       setDeleteProgression(0);
       try {
-        const res = await fetch("/api/auth/user", {
-          method: "DELETE",
+        const res = await fetch("/api/auth/delete", {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
