@@ -5,6 +5,7 @@ import Options from "./Options/Options";
 import Option from "./Options/Option";
 import AuthContext from "@/context/AuthContext";
 import Router from "next/router";
+import TouchAnywhere from "@/components/Utils/TouchAnywhere";
 
 function UserMenu() {
   const { user } = useContext(AuthContext);
@@ -21,6 +22,9 @@ function UserMenu() {
 
   return (
     <>
+      {showOptions ? (
+        <TouchAnywhere onClick={() => setShowOptions(false)} />
+      ) : null}
       <UserMenuContainer
         active={showOptions}
         onClick={() => setShowOptions(!showOptions)}
