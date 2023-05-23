@@ -7,19 +7,22 @@ import type UserFrontend from "@/types/UserFrontend";
 import UserBackend from "@/types/UserBackend";
 import type ProfileForm from "@/types/ProfileForm";
 import type { DeleteBody } from "@/types/controllers/UserController";
+import validateRegister from "@/utils/BackendValidate/validateRegister";
 
 const prisma = new PrismaClient();
 
 class UserController {
-  static async create(
-    req: NextApiRequest,
-    res: NextApiResponse,
-    userData: User
-  ) {
+  static async create(req: NextApiRequest, res: NextApiResponse) {
     if (req.session?.user) {
       return res.status(500).json({ feedback: "You are already logged in." });
     }
     try {
+      const userData: User = req.body;
+      const validationError = await validateRegister(userData);
+      if (validationError.length > 0) {
+        throw new Error(validationError);
+      }
+
       let user = {};
       let passwordHash;
 
@@ -212,6 +215,7 @@ class UserController {
       return res.status(500).json({ feedback: e.message });
     }
   }
+
   static async ceaseTrainer(req: NextApiRequest, res: NextApiResponse) {
     if (!req.session?.user) {
       return res.status(500).json({ feedback: "You are not logged in." });

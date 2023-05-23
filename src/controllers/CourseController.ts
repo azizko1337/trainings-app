@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CreateCourseBody } from "@/types/controllers/CourseController";
 import type CourseInfo from "@/types/CourseInfo";
+import validateCourse from "@/utils/BackendValidate/validateCourse";
 
 const prisma = new PrismaClient();
 
@@ -23,6 +24,11 @@ class CourseController {
         throw new Error("You are not a trainer.");
       }
       const newCourse: CreateCourseBody = req.body;
+      const validationFeedback = await validateCourse(newCourse);
+      if (validationFeedback.length > 0) {
+        throw new Error(validationFeedback);
+      }
+
       try {
         await prisma.course.create({
           data: {
