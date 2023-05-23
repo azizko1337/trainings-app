@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useState, useContext } from "react";
 import Header from "@/components/Text/Header";
 import type CourseInfo from "@/types/CourseInfo";
 import CardsGrid from "@/components/CourseCard/CardsGrid";
@@ -10,8 +9,12 @@ import Input from "@/components/Form/Input/Input";
 import type Filters from "@/types/Filters";
 import type { ChangeEvent } from "react";
 import filterCourses from "@/utils/filterCourses";
+import AuthContext from "@/context/AuthContext";
+import NoAuth from "@/components/Utils/NoAuth";
 
 function Courses() {
+  const { user } = useContext(AuthContext);
+
   const [courses, setCourses] = useState<CourseInfo[]>([]);
   useEffect(() => {
     fetch("/api/course/getParticipiedIn", {
@@ -39,6 +42,8 @@ function Courses() {
     const target = e.target as HTMLInputElement;
     setSearch(target.value);
   }
+
+  if (!user) return <NoAuth />;
 
   return (
     <>

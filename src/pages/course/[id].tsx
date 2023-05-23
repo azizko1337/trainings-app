@@ -19,6 +19,7 @@ import Feedback from "@/components/Form/Feedback";
 import UserFrontend from "@/types/UserFrontend";
 import ParticipantsList from "@/components/ParticipantsList/ParticipantsList";
 import AboutCourse from "@/components/AboutCourse/AboutCourse";
+import NoAuth from "@/components/Utils/NoAuth";
 
 const CoursePage = () => {
   const { user } = useContext(AuthContext);
@@ -156,6 +157,8 @@ const CoursePage = () => {
       errors.level === ""
     );
   }
+
+  if (!user) return <NoAuth />;
 
   if (course?.trainerId === user?.id && user?.isTrainer === true)
     return (
