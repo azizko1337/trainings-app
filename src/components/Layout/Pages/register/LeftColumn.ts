@@ -12,6 +12,8 @@ const LeftColumn = styled.div`
   margin-bottom: 20px;
 
   @media (orientation: portrait) {
+    width: 100%;
+
     gap: 0;
     & > * {
       margin-top: 30px;
