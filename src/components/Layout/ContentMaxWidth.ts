@@ -17,6 +17,10 @@ const ContentMaxWidth = styled.main`
     align-items: flex-end;
     position: relative;
   }
+
+  @media (orientation: portrait) {
+    padding: 0 10px 50px 10px;
+  }
 `;
 
 export default ContentMaxWidth;
