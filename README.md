@@ -9,7 +9,7 @@
 - Postgres
 - Jest
 
-## App is currently hosted on [trainings.azalupka.bieda.it](https://trainings.azalupka.bieda.it)
+## App is currently hosted on [trainings.azalupka.cc](https://trainings.azalupka.cc)
 
 ## How to run?
 
