@@ -83,7 +83,7 @@ function Register() {
       });
       const data = await res.json();
       if (!data.ok) {
-        setFeedback(data.feedback);
+        return setFeedback(data.feedback);
       }
       setFeedback("");
       await Router.push("/");
