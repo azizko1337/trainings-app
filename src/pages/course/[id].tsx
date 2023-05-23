@@ -146,14 +146,14 @@ const CoursePage = () => {
       form.name.length > 0 &&
       form.startDate.length > 0 &&
       form.startTime.length > 0 &&
-      (errors.name !== "" ||
-        errors.startDate !== "" ||
-        errors.endDate !== "" ||
-        errors.startTime !== "" ||
-        errors.endTime !== "" ||
-        errors.language !== "" ||
-        errors.location !== "" ||
-        errors.level !== "")
+      errors.name === "" &&
+      errors.startDate === "" &&
+      errors.endDate === "" &&
+      errors.startTime === "" &&
+      errors.endTime === "" &&
+      errors.language === "" &&
+      errors.location === "" &&
+      errors.level === ""
     );
   }
 
@@ -256,7 +256,9 @@ const CoursePage = () => {
               error={errors.level}
             />
             <Feedback>{feedback}</Feedback>
-            <Button type="submit">Update course</Button>
+            <Button disabled={shouldSubmitBeDisabled()} type="submit">
+              Update course
+            </Button>
           </LeftColumn>
           <RightColumn>
             <ImageInput
