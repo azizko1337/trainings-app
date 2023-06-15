@@ -10,6 +10,7 @@
 - Jest
 
 ## App is currently hosted on [trainings.azalupka.cc](https://trainings.azalupka.cc)
+###  (for presenting purpose) Code to become trainer: `kotnaklawiaturze`
 
 ## How to run?
 
