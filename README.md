@@ -1,6 +1,6 @@
 # Trainings-app
 
-## The application is a project for the ING Fullstack Developer course. The used stack:
+## The application is a project for the ING Hubs' Fullstack Developer course. The used stack:
 
 - Next.js
 - Prisma
